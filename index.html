@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravi- Web Developer Portfolio</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Three.js for 3D animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* Custom styles for a premium feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; 
+            color: #ccd6f6; /* Light Slate */
+        }
+        .accent-color {
+            color: #64ffda; /* Aqua/Teal */
+        }
+        .btn-primary {
+            @apply px-6 py-3 border border-teal-300 text-teal-300 rounded-md text-lg font-medium hover:bg-teal-300 hover:bg-opacity-10 transition-colors duration-300;
+        }
+        .section-heading {
+            @apply text-3xl md:text-4xl font-bold text-gray-200 mb-4 flex items-center;
+        }
+        .section-heading::after {
+            content: '';
+            display: block;
+            position: relative;
+            top: 2px;
+            width: 150px;
+            height: 1px;
+            margin-left: 20px;
+            background-color: #233554; /* Darker Navy */
+        }
+        .card {
+            @apply bg-[#112240] rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2;
+        }
+        /* Canvas for 3D background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all content */
+        }
+        
+        /* Skill icon animation */
+        .skill-icon {
+            transition: transform 0.3s ease-in-out;
+            animation: float 4s ease-in-out infinite;
+        }
+        .skill-icon:hover {
+            transform: scale(1.1) translateY(-5px);
+            filter: brightness(1.2);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Project canvas styling */
+        .project-canvas {
+            width: 100%;
+            height: 192px; /* h-48 */
+            display: block;
+        }
+    </style>
+</head>
+<body class="leading-relaxed antialiased">
+
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header & Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold accent-color">RK</a>
+            <ul class="hidden md:flex space-x-8 text-lg">
+                <li><a href="#about" class="hover:accent-color transition-colors">About</a></li>
+                <li><a href="#skills" class="hover:accent-color transition-colors">Skills</a></li>
+                <li><a href="#projects" class="hover:accent-color transition-colors">Projects</a></li>
+                <li><a href="#contact" class="hover:accent-color transition-colors">Contact</a></li>
+            </ul>
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                ☰
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden p-4">
+            <a href="#about" class="block py-2 text-center hover:accent-color">About</a>
+            <a href="#skills" class="block py-2 text-center hover:accent-color">Skills</a>
+            <a href="#projects" class="block py-2 text-center hover:accent-color">Projects</a>
+            <a href="#contact" class="block py-2 text-center hover:accent-color">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 md:px-16 py-24 relative z-10">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-start">
+            <div class="max-w-4xl">
+                 <div class="flex items-center space-x-8 mb-8">
+                    <img 
+                        src="WhatsApp Image 2025-08-14 at 5.49.01 PM.jpeg" 
+                        alt="Profile Photo of John Doe" 
+                        class="rounded-full w-32 h-32 md:w-48 md:h-48 border-4 border-teal-300 object-cover"
+                        onerror="this.onerror=null;this.src='https://placehold.co/150x150/112240/64ffda?text=Error';"
+                    >
+                    <div>
+                        <p class="text-lg md:text-xl accent-color mb-2">Hi, my name is</p>
+                        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-gray-100">Ravi.</h1>
+                        <h2 class="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-400 mt-2">Ravi Kumar A Learner Today, A Leader Tomorrow</h2>
+                    </div>
+                </div>
+                <p class="text-lg md:text-xl max-w-2xl mt-6 text-gray-400">
+                    I'm a passionate web developer specializing in creating modern, responsive, and user-friendly web applications. I turn complex problems into beautiful and intuitive designs.
+                </p>
+                <div class="mt-10">
+                    <a href="#projects" class="btn-primary">Check out my work!</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20">
+            <h2 class="section-heading">About Me</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
+                <div class="md:col-span-3 text-lg text-gray-400 space-y-4">
+                    <p>
+                        Hello! I’m Ravi Kumar, a passionate learner, creator, and dreamer who believes in the power of technology to shape the future. From a young age, I’ve been deeply interested in AI, coding, and entrepreneurship
+                    </p>
+                    <p>
+                    My journey started with curiosity, but today it has grown into a strong vision — to create something impactful that helps people and inspires others.
+                    </p>
+                    <p>
+                        I am constantly learning new technologies, experimenting with creative ideas, and building projects that reflect my skills. Currently, I am:
+
+📚 Exploring the world of Artificial Intelligence & Machine Learning
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <h2 class="section-heading">My Skills & Tools</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 text-center">
+                <!-- HTML5 -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#E44D26" d="M20.33,115.45,10.77,4.55h106.46l-9.56,110.9L64,127.27Z"/><path fill="#F16529" d="M64,118.4V12.13h45.67L104.4,110.3Z"/><path fill="#EBEBEB" d="M64,35.21H39.82l-2.14-23.08H64V35.21Zm0,23.08H42.34l-2.5,28.09,24.16,6.71V70.21H48.47l1.29-14.42H64V35.21Z"/><path fill="#FFF" d="M64,35.21v-23.08h24.6l-2.14,23.08H64Zm0,58.08,24.16-6.71.36-4.05,2.14-24.04h-26.66v23.08h13.55l-1.29,14.42Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">HTML5</span>
+                </div>
+                <!-- CSS3 -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#264DE4" d="M20.33,115.45,10.77,4.55h106.46l-9.56,110.9L64,127.27Z"/><path fill="#2965F1" d="M64,118.4V12.13h45.67L104.4,110.3Z"/><path fill="#EBEBEB" d="M64,35.21H39.82l-2.14-23.08H64V35.21Zm0,23.08H42.34l-2.5,28.09,24.16,6.71V70.21H48.47l1.29-14.42H64V35.21Z"/><path fill="#FFF" d="M64,35.21v-23.08h24.6l-2.14,23.08H64Zm0,58.08,24.16-6.71.36-4.05,2.14-24.04h-26.66v23.08h13.55l-1.29,14.42Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">CSS3</span>
+                </div>
+                <!-- JavaScript -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#F7DF1E" d="M0,0H128V128H0Z"/><path d="M108.42,97.39a6.06,6.06,0,0,1-4.39,1.81,6.87,6.87,0,0,1-5.1-2.1,7.2,7.2,0,0,1-2-5.46c0-3.83,2.32-6.2,5.74-7.43l4.89-1.78c2.53-.92,3.48-1.72,3.48-3.13,0-1.6-1.07-2.48-2.89-2.48a4.39,4.39,0,0,0-4,2l-4.3-2.73a8.53,8.53,0,0,1,8.34-5.1,8.1,8.1,0,0,1,8.69,8.1c0,4.82-2.38,7.4-6.45,9l-4.6,1.66c-2.81,1-3.6,1.66-3.6,3,0,1.81,1.22,2.73,3.16,2.73a4.9,4.9,0,0,0,4.6-2.48Z"/><path d="M72.4,99.2c-2.81,1.81-6.14,2.81-9.69,2.81-8,0-13.1-4.89-13.1-11.75,0-6.23,4.15-10.43,10.89-10.43,2.68,0,5.1.58,7,1.66l-1.1,4.73c-1.54-.89-3.33-1.42-5.34-1.42-3.48,0-5.77,2.35-5.77,5.92,0,3.63,2.42,6,6.11,6,2.29,0,4.24-.8,5.49-1.87Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">JavaScript</span>
+                </div>
+                <!-- React -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><g fill="#61DAFB"><ellipse ry="50" rx="19" transform="rotate(90)"/><ellipse ry="50" rx="19" transform="rotate(30)"/><ellipse ry="50" rx="19" transform="rotate(-30)"/></g><circle r="10" fill="#222"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">React</span>
+                </div>
+                <!-- Node.js -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#8CC84B" d="M64,4.55,10.77,34.27v59.46L64,123.45l53.23-29.72V34.27ZM97,87.64l-11.41,6.59-11.77-6.77V74.12l-10.12-5.84,10.12-5.84V49.11L85.59,42.34,97,48.93Zm-32.82,18.7L31,87.64V48.93L64.18,30.22Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">Node.js</span>
+                </div>
+                <!-- Python -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#3776AB" d="M64,128A64,64,0,0,1,18.34,8.69V34.27h23.08a23.08,23.08,0,1,0,0,46.15H18.34v23.08A63.81,63.81,0,0,1,64,128Z"/><path fill="#FFD43B" d="M64,0A64,64,0,0,1,109.66,119.31V93.73H86.58a23.08,23.08,0,1,0,0-46.15h23.08V24.5A63.81,63.81,0,0,1,64,0Z"/><circle cx="86.58" cy="34.27" r="11.54" fill="#FFF"/><circle cx="41.42" cy="93.73" r="11.54" fill="#FFF"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">Python</span>
+                </div>
+                <!-- Data Science -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4v16a1 1 0 001 1h14a1 1 0 001-1V4"></path></svg>
+                    <span class="text-lg font-semibold text-gray-200">Data Science</span>
+                </div>
+                <!-- Cybersecurity -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <span class="text-lg font-semibold text-gray-200">Cybersecurity</span>
+                </div>
+                <!-- Author/Writer -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span class="text-lg font-semibold text-gray-200">Author/Writer</span>
+                </div>
+                <!-- Tailwind CSS -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#38BDF8" d="M64,4.55c-42.24,0-59.45,21.82-59.45,21.82S21.76,4.55,64,4.55s59.45,21.82,59.45,21.82S106.24,4.55,64,4.55Zm0,59.45c-42.24,0-59.45,21.82-59.45,21.82s17.21-21.82,59.45-21.82,59.45,21.82,59.45,21.82S106.24,64,64,64Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">Tailwind CSS</span>
+                </div>
+                <!-- Git -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#F05033" d="m119.44 56.54-56.54 56.54a8.84 8.84 0 0 1-12.5 0L8.56 61.24a8.84 8.84 0 0 1 0-12.5l12.5-12.5a8.84 8.84 0 0 1 12.5 0l22.08 22.08V12.5a8.84 8.84 0 0 1 8.84-8.84h17.68a8.84 8.84 0 0 1 8.84 8.84v44.2l15.92-15.92a8.84 8.84 0 0 1 12.5 0l12.5 12.5a8.84 8.84 0 0 1 0 12.5z"/><circle cx="85.08" cy="41.42" r="8.84" fill="#FFF"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">Git</span>
+                </div>
+                <!-- Figma -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#F24E1E" d="M42.67,128A21.33,21.33,0,0,1,21.33,106.67V85.33a21.33,21.33,0,0,1,42.67,0v21.34A21.33,21.33,0,0,1,42.67,128Z"/><path fill="#FF7262" d="M21.33,64a21.33,21.33,0,0,1,21.34-21.33H64a21.33,21.33,0,1,1,0,42.66H42.67A21.33,21.33,0,0,1,21.33,64Z"/><path fill="#A259FF" d="M21.33,21.33a21.33,21.33,0,0,1,42.67,0V42.67a21.33,21.33,0,1,1-42.67,0Z"/><path fill="#1ABCFE" d="M64,0a21.33,21.33,0,0,1,21.33,21.33V42.67a21.33,21.33,0,1,1-42.66,0V21.33A21.33,21.33,0,0,1,64,0Z"/><path fill="#0ACF83" d="M85.33,64a21.33,21.33,0,1,1,21.34-21.33A21.33,21.33,0,0,1,85.33,64Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">Figma</span>
+                </div>
+                 <!-- SQL -->
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <svg class="w-16 h-16 mb-3 skill-icon" viewBox="0 0 128 128"><path fill="#F29111" d="M10,21.27v85.46a4.27,4.27,0,0,0,4.27,4.27H113.73a4.27,4.27,0,0,0,4.27-4.27V21.27a4.27,4.27,0,0,0-4.27-4.27H14.27A4.27,4.27,0,0,0,10,21.27Z"/><path fill="#FFF" d="M113.73,7H14.27A7.28,7.28,0,0,0,7,14.27v99.46A7.28,7.28,0,0,0,14.27,121H113.73A7.28,7.28,0,0,0,121,113.73V14.27A7.28,7.28,0,0,0,113.73,7ZM30.8,96.4H48.27v8.54H22.27V80.53H30.8Zm55.33-14.26a12.8,12.8,0,0,1-12.8,12.8H56.53V45.87h17.07a12.8,12.8,0,0,1,12.53,12.8Zm14.27,0a21.33,21.33,0,1,1-21.33-21.33A21.33,21.33,0,0,1,100.4,82.13Z"/></svg>
+                    <span class="text-lg font-semibold text-gray-200">SQL</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20">
+            <h2 class="section-heading">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="card overflow-hidden">
+                    <canvas id="project-one-canvas" class="project-canvas"></canvas>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-200 mb-2">E-commerce Platform</h3>
+                        <p class="text-gray-400 mb-4">A full-featured e-commerce website with product listings, a shopping cart, and a checkout process.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">React</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">Node.js</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">MongoDB</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Live Demo</a>
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Source Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="card overflow-hidden">
+                    <canvas id="project-two-canvas" class="project-canvas"></canvas>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-200 mb-2">Ravi Ai App</h3>
+                        <p class="text-gray-400 mb-4">Ravi AI – Your Real-Time Smart Assistant</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">Vue.js</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">Firebase</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">Tailwind</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Live Demo</a>
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Source Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="card overflow-hidden">
+                    <canvas id="project-three-canvas" class="project-canvas"></canvas>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-200 mb-2">AI Translation Service</h3>
+                        <p class="text-gray-400 mb-4">A personal blog platform built with a static site generator for speed and security. Features markdown support.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">Gatsby</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">GraphQL</span>
+                            <span class="bg-gray-700 text-teal-300 text-sm font-semibold px-3 py-1 rounded-full">CMS</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Live Demo</a>
+                            <a href="#" class="text-teal-300 hover:text-white transition-colors">Source Code</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 text-center">
+            <h2 class="text-2xl font-semibold accent-color">What's Next?</h2>
+            <h3 class="text-4xl md:text-5xl font-bold text-gray-200 mt-4 mb-6">Get In Touch</h3>
+            <p class="text-lg text-gray-400 max-w-xl mx-auto mb-10">
+                My inbox is always open. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+            </p>
+            <a href="mailto:johndoe@example.com" class="btn-primary text-xl">Say Hello</a>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-gray-500 relative z-10">
+        <div class="flex justify-center space-x-6 mb-4">
+            <!-- GitHub Icon -->
+            <a href="https://github.com/RHIH32" aria-label="GitHub Profile" class="hover:text-teal-300 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+            </a>
+            <!-- LinkedIn Icon -->
+            <a href="https://www.linkedin.com/in/ravi-kumar-b576b924a" aria-label="LinkedIn Profile" class="hover:text-teal-300 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <!-- Twitter Icon -->
+            <a href="#" aria-label="Twitter Profile" class="hover:text-teal-300 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+            </a>
+        </div>
+        <p>Designed & Built by John Doe</p>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileMenuLinks = mobileMenu.getElementsByTagName('a');
+        for (let link of mobileMenuLinks) {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        }
+    </script>
+    
+    <script>
+        // --- Main Background Animation ---
+        const bgScene = new THREE.Scene();
+        const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const bgRenderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg-canvas'),
+            alpha: true
+        });
+
+        bgRenderer.setPixelRatio(window.devicePixelRatio);
+        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+        bgCamera.position.z = 5;
+        bgRenderer.setClearColor(0x000000, 0);
+
+        const bgAmbientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        bgScene.add(bgAmbientLight);
+        const bgDirectionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        bgDirectionalLight.position.set(5, 5, 5);
+        bgScene.add(bgDirectionalLight);
+
+        const earthGeometry = new THREE.SphereGeometry(2, 32, 32);
+        const earthMaterial = new THREE.MeshStandardMaterial({
+            color: 0x2266dd,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+        bgScene.add(earth);
+
+        const particleCount = 5000;
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const indianFlagColors = [new THREE.Color('#FF9933'), new THREE.Color('#FFFFFF'), new THREE.Color('#138808')];
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 25;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 25;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
+            const color = indianFlagColors[Math.floor(Math.random() * indianFlagColors.length)];
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+        }
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.05, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 });
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        bgScene.add(particleSystem);
+
+        // --- Project Canvases Setup ---
+        const scenes = [];
+        
+        // Helper function to setup a scene for a project canvas
+        function setupProjectScene(canvasId, setupCallback) {
+            const canvas = document.querySelector(canvasId);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            renderer.setClearColor(0x000000, 0);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+            
+            const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambient);
+            const directional = new THREE.DirectionalLight(0xffffff, 0.8);
+            directional.position.set(3, 5, 5);
+            scene.add(directional);
+            
+            const objects = setupCallback(scene, camera); // Pass camera to callback
+
+            scenes.push({ canvas, renderer, scene, camera, objects });
+        }
+
+        // Project 1: E-commerce
+        setupProjectScene('#project-one-canvas', (scene, camera) => { // Accept camera
+            camera.position.z = 5;
+            const group = new THREE.Group();
+            const material = new THREE.MeshStandardMaterial({ color: 0x64ffda, roughness: 0.5 });
+            const cartBody = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 1.5), material);
+            const cartHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2), material);
+            cartHandle.rotation.z = Math.PI / 2;
+            cartHandle.position.set(-1, 0.8, 0);
+            group.add(cartBody, cartHandle);
+            scene.add(group);
+            return [group];
+        });
+
+        // Project 2: Ravi (Sun)
+        setupProjectScene('#project-two-canvas', (scene, camera) => { // Accept camera
+            camera.position.z = 4;
+            const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffa500, wireframe: true });
+            const sun = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 16), sunMaterial);
+            scene.add(sun);
+            return [sun];
+        });
+
+        // Project 3: AI Translation
+        setupProjectScene('#project-three-canvas', (scene, camera) => { // Accept camera
+            camera.position.z = 6;
+            const group = new THREE.Group();
+            const material = new THREE.MeshStandardMaterial({ color: 0x8A2BE2, roughness: 0.5 });
+            
+            // Letter 'A'
+            const a_bar = new THREE.Mesh(new THREE.BoxGeometry(1, 0.2, 0.2), material);
+            a_bar.position.y = 0.5;
+            const a_leg1 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2, 0.2), material);
+            a_leg1.position.set(-0.5, 0, 0);
+            a_leg1.rotation.z = 0.2;
+            const a_leg2 = a_leg1.clone();
+            a_leg2.position.x = 0.5;
+            a_leg2.rotation.z = -0.2;
+            group.add(a_bar, a_leg1, a_leg2);
+            
+            scene.add(group);
+            return [group];
+        });
+
+
+        // --- Unified Animation Loop ---
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Animate main background
+            earth.rotation.y = elapsedTime * 0.2;
+            particleSystem.rotation.y = -elapsedTime * 0.1;
+            bgRenderer.render(bgScene, bgCamera);
+
+            // Animate project canvases
+            scenes.forEach(s => {
+                s.renderer.setSize(s.canvas.clientWidth, s.canvas.clientHeight, false);
+                s.camera.aspect = s.canvas.clientWidth / s.canvas.clientHeight;
+                s.camera.updateProjectionMatrix();
+
+                s.objects.forEach(obj => {
+                    obj.rotation.y = elapsedTime * 0.5;
+                    obj.rotation.x = elapsedTime * 0.2;
+                });
+
+                s.renderer.render(s.scene, s.camera);
+            });
+        }
+
+        animate();
+
+        // Handle window resize for main background
+        window.addEventListener('resize', () => {
+            bgCamera.aspect = window.innerWidth / window.innerHeight;
+            bgCamera.updateProjectionMatrix();
+            bgRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+</body>
+</html>
